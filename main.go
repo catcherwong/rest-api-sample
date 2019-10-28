@@ -6,11 +6,14 @@ import (
 	"log"
 
 	"github.com/catcherwong/bgadmin-rest-api/api"
+	"github.com/catcherwong/bgadmin-rest-api/db"
 	"github.com/catcherwong/bgadmin-rest-api/middlewares"
 )
 
 func main() {
 	log.Println("welcome to bgadmin-rest-api")
+
+	defer db.RedisClient.Close()
 
 	r := gin.Default()
 

@@ -6,6 +6,10 @@ type RestResponse struct {
 	Data interface{} `json:"data"`
 }
 
+func (r *RestResponse) SetData(d interface{}) {
+	r.Data = d
+}
+
 func GetOKResponse(obj interface{}) RestResponse {
 	r := RestResponse{
 		Code: OkCode,
@@ -15,10 +19,14 @@ func GetOKResponse(obj interface{}) RestResponse {
 	return r
 }
 
-func GetErrorResponse() RestResponse {
+func GetErrorResponse(msg string) RestResponse {
+	if msg == "" {
+		msg = "Please have a retry"
+	}
+
 	r := RestResponse{
 		Code: ErrorCode,
-		Msg:  "Please have a retry",
+		Msg:  msg,
 		Data: nil,
 	}
 	return r
