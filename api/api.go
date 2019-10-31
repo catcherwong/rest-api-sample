@@ -2,6 +2,7 @@ package api
 
 import (
 	"github.com/catcherwong/bgadmin-rest-api/api/redis"
+	"github.com/catcherwong/bgadmin-rest-api/api/user"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -15,6 +16,8 @@ func InitRouters(e *gin.Engine) {
 		v1.GET("/ping", pong)
 
 		redis.InitRouters(v1)
+
+		user.InitRouters(v1)
 	}
 }
 
