@@ -1,0 +1,3 @@
+app_modd: dev
+version: 1.0
+db: api.db
