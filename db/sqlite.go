@@ -2,7 +2,7 @@ package db
 
 import (
 	"database/sql"
-	"github.com/catcherwong/bgadmin-rest-api/config"
+	"github.com/catcherwong/rest-api-sample/config"
 	_ "github.com/mattn/go-sqlite3"
 )
 
@@ -16,8 +16,7 @@ func init() {
 
 	DB.Ping()
 
-	//if err != nil {
-	//	panic(err)
-	//}
-
+	if err != nil {
+		panic(err)
+	}
 }

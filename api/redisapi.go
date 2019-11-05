@@ -1,27 +1,32 @@
-package redis
+package api
 
 import (
+	"github.com/catcherwong/rest-api-sample/common"
+	"github.com/catcherwong/rest-api-sample/db"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
 	"time"
-
-	"github.com/catcherwong/bgadmin-rest-api/common"
-	"github.com/catcherwong/bgadmin-rest-api/db"
 )
 
-// InitRouters inits redis route
-func InitRouters(r *gin.RouterGroup) {
+type reidsapi struct {
+}
 
-	rg := r.Group("/redis")
+func NewRedisApi() *reidsapi {
+	return new(reidsapi)
+}
+
+func (ua reidsapi) InitRouter(r *gin.Engine) {
+
+	rg := r.Group("/api/redis")
 	{
-		rg.GET("/string", getString)
-		rg.POST("/string", setString)
-		rg.DELETE("/", deleteValue)
+		rg.GET("/string", ua.GetString)
+		rg.POST("/string", ua.SetString)
+		rg.DELETE("/", ua.DeleteValue)
 	}
 }
 
-func setString(c *gin.Context) {
+func (ua reidsapi) SetString(c *gin.Context) {
 
 	d := common.GetOKResponse("")
 
@@ -58,7 +63,7 @@ func setString(c *gin.Context) {
 	c.JSON(http.StatusOK, d)
 }
 
-func deleteValue(c *gin.Context) {
+func (ua reidsapi) DeleteValue(c *gin.Context) {
 
 	d := common.GetOKResponse("")
 
@@ -84,7 +89,7 @@ func deleteValue(c *gin.Context) {
 	c.JSON(http.StatusOK, d)
 }
 
-func getString(c *gin.Context) {
+func (ua reidsapi) GetString(c *gin.Context) {
 
 	d := common.GetOKResponse("")
 

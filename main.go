@@ -1,17 +1,18 @@
 package main
 
 import (
+	"fmt"
+	"github.com/catcherwong/rest-api-sample/config"
+	"github.com/catcherwong/rest-api-sample/middlewares"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	//swaggerFiles "github.com/swaggo/files"
 
-	//swaggerFiles "github.com/swaggo/files"
-	//"github.com/swaggo/gin-swagger"
+	swaggerFiles "github.com/swaggo/files"
+	"github.com/swaggo/gin-swagger"
 	"log"
 
-	"github.com/catcherwong/bgadmin-rest-api/api"
-	"github.com/catcherwong/bgadmin-rest-api/db"
-	"github.com/catcherwong/bgadmin-rest-api/middlewares"
+	"github.com/catcherwong/rest-api-sample/api"
+	"github.com/catcherwong/rest-api-sample/db"
 )
 
 // @title Swagger Example API
@@ -29,25 +30,33 @@ import (
 // @host petstore.swagger.io
 // @BasePath /v2
 func main() {
-	log.Println("welcome to bgadmin-rest-api")
+	log.Println("welcome to rest-api-sample")
 
 	defer db.RedisClient.Close()
 
-	//r := gin.New()
-	//
-	//url := ginSwagger.URL("http://localhost:8080/swagger/doc.json") // The url pointing to API definition
-	//r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
+	gin.SetMode(config.AppCfg.GinMode)
 
-	r := gin.Default()
+	r := gin.New()
+
+	initSwagger(r)
 
 	r.Use(middlewares.AuthMiddleware())
 
 	// enable cors
-	config := cors.DefaultConfig()
-	config.AllowOrigins = []string{"*"}
-	r.Use(cors.New(config))
+	initCors(r)
 
 	api.InitRouters(r)
 
 	r.Run(":9999")
+}
+
+func initSwagger(e *gin.Engine) {
+	url := fmt.Sprintf("http://localhost:%d/swagger/doc.json", config.AppCfg.Port)
+	e.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, ginSwagger.URL(url)))
+}
+
+func initCors(e *gin.Engine) {
+	config := cors.DefaultConfig()
+	config.AllowOrigins = []string{"*"}
+	e.Use(cors.New(config))
 }

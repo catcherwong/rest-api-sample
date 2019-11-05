@@ -1,7 +1,7 @@
 package models
 
 import (
-	"github.com/catcherwong/bgadmin-rest-api/db"
+	"github.com/catcherwong/rest-api-sample/db"
 	"log"
 )
 

@@ -1,8 +1,6 @@
 package api
 
 import (
-	"github.com/catcherwong/bgadmin-rest-api/api/redis"
-	"github.com/catcherwong/bgadmin-rest-api/api/user"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -10,15 +8,14 @@ import (
 func InitRouters(e *gin.Engine) {
 
 	e.GET("/", index)
+	e.GET("/ping", pong)
 
-	v1 := e.Group("/api")
-	{
-		v1.GET("/ping", pong)
+	redisApi := NewRedisApi()
+	redisApi.InitRouter(e)
 
-		redis.InitRouters(v1)
+	userApi := NewUserApi()
+	userApi.InitRouter(e)
 
-		user.InitRouters(v1)
-	}
 }
 
 func pong(c *gin.Context) {
@@ -26,5 +23,5 @@ func pong(c *gin.Context) {
 }
 
 func index(c *gin.Context) {
-	c.String(http.StatusOK, "welcome to bgadmin-rest-api")
+	c.String(http.StatusOK, "welcome to rest-api-sample")
 }

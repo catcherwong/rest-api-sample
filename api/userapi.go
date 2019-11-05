@@ -1,26 +1,32 @@
-package user
+package api
 
 import (
-	"github.com/catcherwong/bgadmin-rest-api/common"
-	"github.com/catcherwong/bgadmin-rest-api/db/models"
+	"github.com/catcherwong/rest-api-sample/common"
+	"github.com/catcherwong/rest-api-sample/db/models"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
-
 	"strconv"
 )
 
-func InitRouters(r *gin.RouterGroup) {
+type userApi struct {
+}
 
-	rg := r.Group("/users")
+func NewUserApi() *userApi {
+	return new(userApi)
+}
+
+func (ua userApi) InitRouter(r *gin.Engine) {
+
+	rg := r.Group("/api/users")
 	{
-		rg.GET("/", getUserList)
-		rg.GET("/:id", getUserById)
-		rg.POST("/", addUser)
+		rg.GET("/", ua.GetUserList)
+		rg.GET("/:id", ua.GetUserById)
+		rg.POST("/", ua.AddUser)
 	}
 }
 
-func addUser(c *gin.Context) {
+func (ua userApi) AddUser(c *gin.Context) {
 
 	type UserReq struct {
 		Name   string `json:"name"`
@@ -46,7 +52,7 @@ func addUser(c *gin.Context) {
 	c.JSON(http.StatusOK, common.GetOKResponse("ok"))
 }
 
-func getUserById(c *gin.Context) {
+func (ua userApi) GetUserById(c *gin.Context) {
 
 	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
 
@@ -60,7 +66,7 @@ func getUserById(c *gin.Context) {
 	c.JSON(http.StatusOK, common.GetOKResponse(u))
 }
 
-func getUserList(c *gin.Context) {
+func (ua userApi) GetUserList(c *gin.Context) {
 
 	l := models.GetUserList()
 

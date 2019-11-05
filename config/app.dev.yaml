@@ -1,3 +1,5 @@
-app_modd: dev
+app_mode: dev
 version: 1.0
 db: api.db
+port: 9999
+gin_mode: debug

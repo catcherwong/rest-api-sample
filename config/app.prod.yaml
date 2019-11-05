@@ -1,4 +1,6 @@
-app_modd: prod
+app_mode: prod
 version: 1.0
 db: api.db
+port: 9999
+gin_mode: release
 

@@ -12,11 +12,15 @@ type AppConfig struct {
 	AppMode string `yaml:"app_mode"`
 	Version string `yaml:"version"`
 	DB      string `yaml:"db"`
+	Port    int    `yaml:"port"`
+	GinMode string `yaml:"gin_mode"`
 }
 
 var AppCfg AppConfig
 
 var env = flag.String("env", "dev", "app mode")
+
+//var env = flag.String("env", "prod", "app mode")
 
 func init() {
 	flag.Parse()
