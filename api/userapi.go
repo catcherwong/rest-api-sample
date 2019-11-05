@@ -3,6 +3,7 @@ package api
 import (
 	"github.com/catcherwong/rest-api-sample/common"
 	"github.com/catcherwong/rest-api-sample/db/models"
+	"github.com/catcherwong/rest-api-sample/dto"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
@@ -13,7 +14,7 @@ type userApi struct {
 }
 
 func NewUserApi() *userApi {
-	return new(userApi)
+	return &userApi{}
 }
 
 func (ua userApi) InitRouter(r *gin.Engine) {
@@ -67,8 +68,16 @@ func (ua userApi) GetUserById(c *gin.Context) {
 }
 
 func (ua userApi) GetUserList(c *gin.Context) {
+	var dto dto.GetUserListDto
 
-	l := models.GetUserList()
+	err := c.ShouldBindQuery(&dto)
+
+	if err != nil {
+		c.JSON(http.StatusOK, common.GetErrorResponse("bind error"))
+		return
+	}
+
+	l := models.GetUserListByPage(&dto)
 
 	c.JSON(http.StatusOK, common.GetOKResponse(l))
 

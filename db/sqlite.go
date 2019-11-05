@@ -9,10 +9,21 @@ import (
 var DB *sql.DB
 
 func init() {
-	DB, _ = sql.Open("sqlite3", config.AppCfg.DB)
+	db, err := sql.Open("sqlite3", config.AppCfg.DB)
+
+	DB = db
 
 	DB.SetMaxIdleConns(100)
 	DB.SetMaxOpenConns(150)
+
+	cSql := `CREATE TABLE IF NOT EXISTS userinfo(
+   id INTEGER PRIMARY KEY,
+   name TEXT,
+   gender INTEGER 
+);
+`
+
+	DB.Exec(cSql)
 
 	DB.Ping()
 

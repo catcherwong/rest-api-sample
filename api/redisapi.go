@@ -9,14 +9,14 @@ import (
 	"time"
 )
 
-type reidsapi struct {
+type reidsApi struct {
 }
 
-func NewRedisApi() *reidsapi {
-	return new(reidsapi)
+func NewRedisApi() *reidsApi {
+	return &reidsApi{}
 }
 
-func (ua reidsapi) InitRouter(r *gin.Engine) {
+func (ua reidsApi) InitRouter(r *gin.Engine) {
 
 	rg := r.Group("/api/redis")
 	{
@@ -26,7 +26,7 @@ func (ua reidsapi) InitRouter(r *gin.Engine) {
 	}
 }
 
-func (ua reidsapi) SetString(c *gin.Context) {
+func (ua reidsApi) SetString(c *gin.Context) {
 
 	d := common.GetOKResponse("")
 
@@ -63,7 +63,7 @@ func (ua reidsapi) SetString(c *gin.Context) {
 	c.JSON(http.StatusOK, d)
 }
 
-func (ua reidsapi) DeleteValue(c *gin.Context) {
+func (ua reidsApi) DeleteValue(c *gin.Context) {
 
 	d := common.GetOKResponse("")
 
@@ -89,7 +89,7 @@ func (ua reidsapi) DeleteValue(c *gin.Context) {
 	c.JSON(http.StatusOK, d)
 }
 
-func (ua reidsapi) GetString(c *gin.Context) {
+func (ua reidsApi) GetString(c *gin.Context) {
 
 	d := common.GetOKResponse("")
 
