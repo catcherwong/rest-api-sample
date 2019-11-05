@@ -16,6 +16,9 @@ func InitRouters(e *gin.Engine) {
 	userApi := NewUserApi()
 	userApi.InitRouter(e)
 
+	metricsApi := NewMetricsApi()
+	metricsApi.InitRouter(e)
+
 }
 
 func pong(c *gin.Context) {

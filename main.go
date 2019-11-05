@@ -6,13 +6,14 @@ import (
 	"github.com/catcherwong/rest-api-sample/middlewares"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-
 	swaggerFiles "github.com/swaggo/files"
 	"github.com/swaggo/gin-swagger"
 	"log"
 
 	"github.com/catcherwong/rest-api-sample/api"
 	"github.com/catcherwong/rest-api-sample/db"
+
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 // @title Swagger Example API
@@ -40,6 +41,8 @@ func main() {
 
 	initSwagger(r)
 
+	r.GET("/metrics", metrics)
+
 	r.Use(middlewares.AuthMiddleware())
 
 	// enable cors
@@ -48,6 +51,10 @@ func main() {
 	api.InitRouters(r)
 
 	r.Run(":9999")
+}
+
+func metrics(c *gin.Context) {
+	promhttp.Handler().ServeHTTP(c.Writer, c.Request)
 }
 
 func initSwagger(e *gin.Engine) {
