@@ -1,4 +1,4 @@
-package api
+package controllers
 
 import (
 	"github.com/catcherwong/rest-api-sample/common"
@@ -7,26 +7,18 @@ import (
 	"net/http"
 )
 
-type metricsApi struct {
-}
-
-func NewMetricsApi() *metricsApi {
-	return &metricsApi{}
+type MetricsController struct {
 }
 
 func init() {
 	prometheus.MustRegister(bizTotal)
 }
 
-func (ua metricsApi) InitRouter(r *gin.Engine) {
-
-	rg := r.Group("/api/metrics")
-	{
-		rg.GET("/", ua.Record)
-	}
+func NewMetricsController() *MetricsController {
+	return &MetricsController{}
 }
 
-func (ua metricsApi) Record(c *gin.Context) {
+func (mc MetricsController) Record(c *gin.Context) {
 
 	bizTotal.With(prometheus.Labels{"biztype": "mybiztype", "bizname": "mybizname"}).Inc()
 

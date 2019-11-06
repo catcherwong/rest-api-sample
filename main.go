@@ -4,13 +4,13 @@ import (
 	"fmt"
 	"github.com/catcherwong/rest-api-sample/config"
 	"github.com/catcherwong/rest-api-sample/middlewares"
+	"github.com/catcherwong/rest-api-sample/routers"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	"github.com/swaggo/gin-swagger"
 	"log"
 
-	"github.com/catcherwong/rest-api-sample/api"
 	"github.com/catcherwong/rest-api-sample/db"
 
 	"github.com/prometheus/client_golang/prometheus/promhttp"
@@ -39,6 +39,9 @@ func main() {
 
 	r := gin.New()
 
+	r.Use(gin.Logger())
+	r.Use(gin.Recovery())
+
 	initSwagger(r)
 
 	r.GET("/metrics", metrics)
@@ -48,7 +51,9 @@ func main() {
 	// enable cors
 	initCors(r)
 
-	api.InitRouters(r)
+	//api.InitRouters(r)
+
+	routers.InitRouters(r)
 
 	r.Run(":9999")
 }

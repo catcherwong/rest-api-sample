@@ -1,42 +1,21 @@
-package models
+package data
 
 import (
 	"fmt"
 	"github.com/catcherwong/rest-api-sample/db"
 	"github.com/catcherwong/rest-api-sample/dto"
+	models2 "github.com/catcherwong/rest-api-sample/models"
 	"log"
 )
 
-type User struct {
-	Id     int64
-	Name   string
-	Gender int
+type UserRepo struct {
 }
 
-func GetUserList() []User {
-
-	var l []User
-
-	sql := "select id, name, gender from userinfo"
-
-	rows, err := db.DB.Query(sql)
-	if err != nil {
-		log.Println(err)
-	}
-
-	for rows.Next() {
-		var u User
-		err = rows.Scan(&u.Id, &u.Name, &u.Gender)
-
-		l = append(l, u)
-	}
-
-	defer rows.Close()
-
-	return l
+func NewUserRepo() *UserRepo {
+	return &UserRepo{}
 }
 
-func GetUserListByPage(d *dto.GetUserListDto) []User {
+func (r UserRepo) GetUserListByPage(d *dto.GetUserListDto) []models2.User {
 
 	if d.PageIndex <= 0 {
 		d.PageIndex = 1
@@ -48,7 +27,7 @@ func GetUserListByPage(d *dto.GetUserListDto) []User {
 
 	limit := (d.PageIndex - 1) * d.PageSize
 
-	var l []User
+	var l []models2.User
 
 	var args []interface{}
 
@@ -80,7 +59,7 @@ func GetUserListByPage(d *dto.GetUserListDto) []User {
 	}
 
 	for rows.Next() {
-		var u User
+		var u models2.User
 		err = rows.Scan(&u.Id, &u.Name, &u.Gender)
 
 		l = append(l, u)
@@ -91,19 +70,19 @@ func GetUserListByPage(d *dto.GetUserListDto) []User {
 	return l
 }
 
-func GetUserById(id int64) User {
+func (r UserRepo) GetUserById(id int64) models2.User {
 
 	sql := "select id, name, gender from userinfo where id = ? limit 1"
 
 	row := db.DB.QueryRow(sql, id)
 
-	var u User
+	var u models2.User
 	row.Scan(&u.Id, &u.Name, &u.Gender)
 
 	return u
 }
 
-func CreateUser(u User) error {
+func (r UserRepo) CreateUser(u models2.User) error {
 
 	sql := "insert into userinfo (name, gender) values (?,?)"
 

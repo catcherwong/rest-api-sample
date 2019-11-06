@@ -1,33 +1,25 @@
-package api
+package controllers
 
 import (
+	"github.com/catcherwong/rest-api-sample/biz"
 	"github.com/catcherwong/rest-api-sample/common"
-	"github.com/catcherwong/rest-api-sample/db/models"
 	"github.com/catcherwong/rest-api-sample/dto"
+	models2 "github.com/catcherwong/rest-api-sample/models"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
 	"strconv"
 )
 
-type userApi struct {
+type UserController struct {
+	userBiz *biz.UserBiz
 }
 
-func NewUserApi() *userApi {
-	return &userApi{}
+func NewUserController() *UserController {
+	return &UserController{biz.NewUserBiz()}
 }
 
-func (ua userApi) InitRouter(r *gin.Engine) {
-
-	rg := r.Group("/api/users")
-	{
-		rg.GET("/", ua.GetUserList)
-		rg.GET("/:id", ua.GetUserById)
-		rg.POST("/", ua.AddUser)
-	}
-}
-
-func (ua userApi) AddUser(c *gin.Context) {
+func (uc UserController) AddUser(c *gin.Context) {
 
 	type UserReq struct {
 		Name   string `json:"name"`
@@ -42,7 +34,7 @@ func (ua userApi) AddUser(c *gin.Context) {
 		return
 	}
 
-	err = models.CreateUser(models.User{Name: req.Name, Gender: req.Gender})
+	err = uc.userBiz.CreateUser(models2.User{Name: req.Name, Gender: req.Gender})
 
 	if err != nil {
 		log.Println("db error", err)
@@ -53,7 +45,7 @@ func (ua userApi) AddUser(c *gin.Context) {
 	c.JSON(http.StatusOK, common.GetOKResponse("ok"))
 }
 
-func (ua userApi) GetUserById(c *gin.Context) {
+func (uc UserController) GetUserById(c *gin.Context) {
 
 	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
 
@@ -62,12 +54,12 @@ func (ua userApi) GetUserById(c *gin.Context) {
 		return
 	}
 
-	u := models.GetUserById(id)
+	u := uc.userBiz.GetUserById(id)
 
 	c.JSON(http.StatusOK, common.GetOKResponse(u))
 }
 
-func (ua userApi) GetUserList(c *gin.Context) {
+func (uc UserController) GetUserList(c *gin.Context) {
 	var dto dto.GetUserListDto
 
 	err := c.ShouldBindQuery(&dto)
@@ -77,7 +69,7 @@ func (ua userApi) GetUserList(c *gin.Context) {
 		return
 	}
 
-	l := models.GetUserListByPage(&dto)
+	l := uc.userBiz.GetUserList(&dto)
 
 	c.JSON(http.StatusOK, common.GetOKResponse(l))
 

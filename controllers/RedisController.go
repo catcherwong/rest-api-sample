@@ -1,32 +1,22 @@
-package api
+package controllers
 
 import (
+	"github.com/catcherwong/rest-api-sample/biz"
 	"github.com/catcherwong/rest-api-sample/common"
-	"github.com/catcherwong/rest-api-sample/db"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
-	"time"
 )
 
-type reidsApi struct {
+type RedisController struct {
+	redisBiz *biz.RedisBiz
 }
 
-func NewRedisApi() *reidsApi {
-	return &reidsApi{}
+func NewRedisController() *RedisController {
+	return &RedisController{biz.NewRedisBiz()}
 }
 
-func (ua reidsApi) InitRouter(r *gin.Engine) {
-
-	rg := r.Group("/api/redis")
-	{
-		rg.GET("/string", ua.GetString)
-		rg.POST("/string", ua.SetString)
-		rg.DELETE("/", ua.DeleteValue)
-	}
-}
-
-func (ua reidsApi) SetString(c *gin.Context) {
+func (rc RedisController) SetString(c *gin.Context) {
 
 	d := common.GetOKResponse("")
 
@@ -48,9 +38,7 @@ func (ua reidsApi) SetString(c *gin.Context) {
 		return
 	}
 
-	t := time.Second * time.Duration(r.Expiration)
-
-	err = db.RedisClient.Set(r.Key, r.Value, t).Err()
+	_, err = rc.redisBiz.SetString(r.Key, r.Value, r.Expiration)
 
 	if err != nil {
 		log.Println("bind param error")
@@ -63,7 +51,7 @@ func (ua reidsApi) SetString(c *gin.Context) {
 	c.JSON(http.StatusOK, d)
 }
 
-func (ua reidsApi) DeleteValue(c *gin.Context) {
+func (rc RedisController) DeleteValue(c *gin.Context) {
 
 	d := common.GetOKResponse("")
 
@@ -75,7 +63,7 @@ func (ua reidsApi) DeleteValue(c *gin.Context) {
 		return
 	}
 
-	err := db.RedisClient.Del(key).Err()
+	_, err := rc.redisBiz.DeleteValue(key)
 
 	if err != nil {
 
@@ -89,7 +77,7 @@ func (ua reidsApi) DeleteValue(c *gin.Context) {
 	c.JSON(http.StatusOK, d)
 }
 
-func (ua reidsApi) GetString(c *gin.Context) {
+func (rc RedisController) GetString(c *gin.Context) {
 
 	d := common.GetOKResponse("")
 
@@ -101,7 +89,7 @@ func (ua reidsApi) GetString(c *gin.Context) {
 		return
 	}
 
-	v, err := db.RedisClient.Get(key).Result()
+	v, err := rc.redisBiz.GetString(key)
 
 	if err != nil {
 
