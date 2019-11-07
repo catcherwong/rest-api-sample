@@ -1,20 +1,26 @@
 package db
 
 import (
-	"database/sql"
 	"github.com/catcherwong/rest-api-sample/config"
-	_ "github.com/mattn/go-sqlite3"
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/sqlite"
 )
 
-var DB *sql.DB
+var SQLiteDb *gorm.DB
 
 func init() {
-	db, err := sql.Open("sqlite3", config.AppCfg.DB)
 
-	DB = db
+	db, err := gorm.Open("sqlite3", config.AppCfg.DB)
+	if err != nil {
+		panic("failed to connect database")
+	}
 
-	DB.SetMaxIdleConns(100)
-	DB.SetMaxOpenConns(150)
+	db.LogMode(true)
+
+	SQLiteDb = db
+
+	SQLiteDb.DB().SetMaxIdleConns(100)
+	SQLiteDb.DB().SetMaxIdleConns(150)
 
 	cSql := `CREATE TABLE IF NOT EXISTS userinfo(
    id INTEGER PRIMARY KEY,
@@ -23,11 +29,5 @@ func init() {
 );
 `
 
-	DB.Exec(cSql)
-
-	DB.Ping()
-
-	if err != nil {
-		panic(err)
-	}
+	SQLiteDb.Exec(cSql)
 }

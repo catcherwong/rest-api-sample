@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"github.com/catcherwong/rest-api-sample/config"
-	"github.com/catcherwong/rest-api-sample/middlewares"
 	"github.com/catcherwong/rest-api-sample/routers"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -46,7 +45,7 @@ func main() {
 
 	r.GET("/metrics", metrics)
 
-	r.Use(middlewares.AuthMiddleware())
+	//r.Use(middlewares.AuthMiddleware())
 
 	// enable cors
 	initCors(r)

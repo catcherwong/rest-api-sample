@@ -1,11 +1,9 @@
 package data
 
 import (
-	"fmt"
 	"github.com/catcherwong/rest-api-sample/db"
 	"github.com/catcherwong/rest-api-sample/dto"
-	models2 "github.com/catcherwong/rest-api-sample/models"
-	"log"
+	"github.com/catcherwong/rest-api-sample/models"
 )
 
 type UserRepo struct {
@@ -15,90 +13,43 @@ func NewUserRepo() *UserRepo {
 	return &UserRepo{}
 }
 
-func (r UserRepo) GetUserListByPage(d *dto.GetUserListDto) []models2.User {
+func (r UserRepo) GetUserListByPage(d *dto.GetUserListDto) []models.User {
 
-	if d.PageIndex <= 0 {
-		d.PageIndex = 1
-	}
-
-	if d.PageSize <= 0 {
-		d.PageSize = 10
-	}
+	var l []models.User
 
 	limit := (d.PageIndex - 1) * d.PageSize
 
-	var l []models2.User
-
-	var args []interface{}
-
-	sql := "select id, name, gender from userinfo where 1 = 1 "
+	conn := db.SQLiteDb.Table("userinfo")
 
 	if d.Id > 0 {
-		sql += " and id = ?"
-		args = append(args, d.Id)
+		conn = conn.Where(" id = ? ", d.Id)
 	}
 
 	if d.Name != "" {
-		sql += " and name = ?"
-		args = append(args, d.Name)
+		conn = conn.Where(" name = ? ", d.Name)
 	}
 
 	if d.Gender > 0 {
-		sql += " and gender = ?"
-		args = append(args, d.Gender)
+		conn = conn.Where(" gender = ?", d.Gender)
 	}
 
-	sql += fmt.Sprintf(" limit %d offset %d ", d.PageSize, limit)
-
-	log.Print(sql)
-
-	rows, err := db.DB.Query(sql, args...)
-
-	if err != nil {
-		log.Println(err)
-	}
-
-	for rows.Next() {
-		var u models2.User
-		err = rows.Scan(&u.Id, &u.Name, &u.Gender)
-
-		l = append(l, u)
-	}
-
-	defer rows.Close()
+	conn.Limit(d.PageSize).Offset(limit).Find(&l)
 
 	return l
 }
 
-func (r UserRepo) GetUserById(id int64) models2.User {
+func (r UserRepo) GetUserById(id int64) models.User {
 
-	sql := "select id, name, gender from userinfo where id = ? limit 1"
+	var u models.User
 
-	row := db.DB.QueryRow(sql, id)
-
-	var u models2.User
-	row.Scan(&u.Id, &u.Name, &u.Gender)
+	db.SQLiteDb.Table("userinfo").Where("id = ? ", id).First(&u)
 
 	return u
 }
 
-func (r UserRepo) CreateUser(u models2.User) error {
+func (r UserRepo) CreateUser(u models.User) error {
 
-	sql := "insert into userinfo (name, gender) values (?,?)"
-
-	s, err := db.DB.Prepare(sql)
-
-	if err != nil {
-		return err
-	}
-
-	res, err := s.Exec(u.Name, u.Gender)
-
-	if err != nil {
-		return err
-	}
-
-	_, err = res.RowsAffected()
+	err := db.SQLiteDb.Raw("insert into userinfo (name, gender) values (?,?)", u.Name, u.Gender).Error
 
 	return err
 }

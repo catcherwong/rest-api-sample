@@ -30,6 +30,14 @@ func (b UserBiz) GetUserById(id int64) models2.User {
 
 func (b UserBiz) GetUserList(d *dto.GetUserListDto) []models2.User {
 
+	if d.PageIndex <= 0 {
+		d.PageIndex = 1
+	}
+
+	if d.PageSize <= 0 {
+		d.PageSize = 10
+	}
+
 	l := b.userRepo.GetUserListByPage(d)
 
 	return l
