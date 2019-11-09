@@ -14,6 +14,7 @@ func InitRouters(e *gin.Engine) {
 	initUserController(e)
 	initRedisController(e)
 	initMetricsController(e)
+	initMockController(e)
 }
 
 func pong(c *gin.Context) {
@@ -55,5 +56,17 @@ func initMetricsController(e *gin.Engine) {
 	rg := e.Group("/v1/api/metrics")
 	{
 		rg.GET("/", c.Record)
+	}
+}
+
+func initMockController(e *gin.Engine) {
+
+	c := controllers.NewMockController()
+
+	rg := e.Group("/api/mock")
+	{
+		rg.GET("/", c.GetString)
+		rg.GET("/get1", c.GetString1)
+		rg.GET("/get2", c.GetString2)
 	}
 }

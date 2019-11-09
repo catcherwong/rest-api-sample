@@ -1,4 +1,4 @@
-package db
+package common
 
 import (
 	"github.com/catcherwong/rest-api-sample/config"

@@ -11,3 +11,8 @@ type GetUserListDto struct {
 	Name   string `form:"name"`
 	Gender int    `form:"gender"`
 }
+
+type UserReq struct {
+	Name   string `json:"name"`
+	Gender int    `json:"gender"`
+}

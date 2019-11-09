@@ -10,7 +10,7 @@ import (
 	"github.com/swaggo/gin-swagger"
 	"log"
 
-	"github.com/catcherwong/rest-api-sample/db"
+	db "github.com/catcherwong/rest-api-sample/common"
 
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )

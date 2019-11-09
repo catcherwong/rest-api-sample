@@ -1,7 +1,7 @@
 package data
 
 import (
-	"github.com/catcherwong/rest-api-sample/db"
+	db "github.com/catcherwong/rest-api-sample/common"
 	"github.com/catcherwong/rest-api-sample/dto"
 	"github.com/catcherwong/rest-api-sample/models"
 )

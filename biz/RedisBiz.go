@@ -1,7 +1,7 @@
 package biz
 
 import (
-	"github.com/catcherwong/rest-api-sample/db"
+	db "github.com/catcherwong/rest-api-sample/common"
 	"time"
 )
 

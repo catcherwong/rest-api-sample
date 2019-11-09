@@ -21,11 +21,7 @@ func NewUserController() *UserController {
 
 func (uc UserController) AddUser(c *gin.Context) {
 
-	type UserReq struct {
-		Name   string `json:"name"`
-		Gender int    `json:"gender"`
-	}
-	var req UserReq
+	var req dto.UserReq
 	err := c.ShouldBindJSON(&req)
 
 	if err != nil {
