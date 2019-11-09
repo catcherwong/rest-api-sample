@@ -14,7 +14,9 @@ git clone https://github.com/catcherwong/rest-api-sample.git
 ```
 $ cd rest-api-sample
 
-$ go run main.go 
+$ docker build -t rest-api-sample:v1 .
+
+$ docker run -p 9999:9999 rest-api-sample:v1
 ```
 
 Swagger doc
