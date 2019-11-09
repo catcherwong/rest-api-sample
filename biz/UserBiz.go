@@ -4,6 +4,7 @@ import (
 	"github.com/catcherwong/rest-api-sample/data"
 	"github.com/catcherwong/rest-api-sample/dto"
 	models2 "github.com/catcherwong/rest-api-sample/models"
+	"log"
 )
 
 type UserBiz struct {
@@ -16,8 +17,10 @@ func NewUserBiz() *UserBiz {
 
 func (b UserBiz) CreateUser(u models2.User) error {
 
-	err := b.userRepo.CreateUser(u)
+	log.Println(u)
 
+	err := b.userRepo.CreateUser(u)
+	log.Println(err)
 	return err
 }
 

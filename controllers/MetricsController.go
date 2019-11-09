@@ -18,6 +18,11 @@ func NewMetricsController() *MetricsController {
 	return &MetricsController{}
 }
 
+// @Summary Record some metrics
+// @Tags Metrics
+// @Produce  json
+// @Success 200 {object} common.RestResponse "{"code":0,"data":{},"msg":"ok"}"
+// @Router /api/v1/metrics [get]
 func (mc MetricsController) Record(c *gin.Context) {
 
 	bizTotal.With(prometheus.Labels{"biztype": "mybiztype", "bizname": "mybizname"}).Inc()

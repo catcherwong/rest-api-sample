@@ -1,0 +1,369 @@
+{
+    "schemes": [
+        "http"
+    ],
+    "swagger": "2.0",
+    "info": {
+        "description": "This is a sample about rest api .",
+        "title": "rest-api-sample",
+        "termsOfService": "https://github.com/catcherwong",
+        "contact": {
+            "name": "Catcher Wong",
+            "url": "https://github.com/catcherwong",
+            "email": "catcher_hwq@outlook.com"
+        },
+        "license": {
+            "name": "MIT",
+            "url": "https://github.com/catcherwong/rest-api-sample/blob/master/LICENSE"
+        },
+        "version": "1.0"
+    },
+    "basePath": "/",
+    "paths": {
+        "/api/mock": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Mock"
+                ],
+                "summary": "Get some result after 2 second",
+                "responses": {
+                    "200": {
+                        "description": "{\"data\":[]}",
+                        "schema": {
+                            "$ref": "#/definitions/common.RestResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/mock/get1": {
+            "get": {
+                "produces": [
+                    "text/plain"
+                ],
+                "tags": [
+                    "Mock"
+                ],
+                "summary": "Get some result after 1 second",
+                "responses": {
+                    "200": {
+                        "description": "1",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/mock/get2": {
+            "get": {
+                "produces": [
+                    "text/plain"
+                ],
+                "tags": [
+                    "Mock"
+                ],
+                "summary": "Get some result after 2 second",
+                "responses": {
+                    "200": {
+                        "description": "2",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/metrics": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Metrics"
+                ],
+                "summary": "Record some metrics",
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":0,\"data\":{},\"msg\":\"ok\"}",
+                        "schema": {
+                            "$ref": "#/definitions/common.RestResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/redis": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Redis"
+                ],
+                "summary": "Delete a key from redis",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Key",
+                        "name": "key",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":0,\"data\":{},\"msg\":\"ok\"}",
+                        "schema": {
+                            "$ref": "#/definitions/common.RestResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/redis/string": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Redis"
+                ],
+                "summary": "Get a string value from redis",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Key",
+                        "name": "key",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":0,\"data\":{},\"msg\":\"ok\"}",
+                        "schema": {
+                            "$ref": "#/definitions/common.RestResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Redis"
+                ],
+                "summary": "Set string value to redis",
+                "parameters": [
+                    {
+                        "description": "Name",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.SetStringRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":0,\"data\":{},\"msg\":\"ok\"}",
+                        "schema": {
+                            "$ref": "#/definitions/common.RestResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/users": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get User List",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Id",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Name",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Gender",
+                        "name": "gender",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "PageIndex",
+                        "name": "pageIndex",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "PageSize",
+                        "name": "pageSize",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":0,\"data\":{},\"msg\":\"ok\"}",
+                        "schema": {
+                            "$ref": "#/definitions/common.RestResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Add User",
+                "parameters": [
+                    {
+                        "description": "Name",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.UserReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":0,\"data\":{},\"msg\":\"ok\"}",
+                        "schema": {
+                            "$ref": "#/definitions/common.RestResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/users/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get User By Id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":0,\"data\":{},\"msg\":\"ok\"}",
+                        "schema": {
+                            "$ref": "#/definitions/common.RestResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "common.RestResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {
+                    "type": "object"
+                },
+                "msg": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.SetStringRequest": {
+            "type": "object",
+            "properties": {
+                "exp": {
+                    "type": "integer"
+                },
+                "key": {
+                    "type": "string"
+                },
+                "val": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.UserReq": {
+            "type": "object",
+            "properties": {
+                "gender": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    }
+}

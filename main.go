@@ -1,73 +1,37 @@
 package main
 
 import (
-	"fmt"
-	"github.com/catcherwong/rest-api-sample/config"
+	"github.com/catcherwong/rest-api-sample/common"
 	"github.com/catcherwong/rest-api-sample/routers"
-	"github.com/gin-contrib/cors"
-	"github.com/gin-gonic/gin"
-	swaggerFiles "github.com/swaggo/files"
-	"github.com/swaggo/gin-swagger"
 	"log"
 
-	db "github.com/catcherwong/rest-api-sample/common"
-
-	"github.com/prometheus/client_golang/prometheus/promhttp"
+	_ "github.com/catcherwong/rest-api-sample/docs"
 )
 
-// @title Swagger Example API
+// @title rest-api-sample
 // @version 1.0
-// @description This is a sample server Petstore server.
-// @termsOfService http://swagger.io/terms/
+// @description This is a sample about rest api .
+// @termsOfService https://github.com/catcherwong
 
-// @contact.name API Support
-// @contact.url http://www.swagger.io/support
-// @contact.email support@swagger.io
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
 
-// @license.name Apache 2.0
-// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
+// @contact.name Catcher Wong
+// @contact.url https://github.com/catcherwong
+// @contact.email catcher_hwq@outlook.com
 
-// @host petstore.swagger.io
-// @BasePath /v2
+// @license.name MIT
+// @license.url https://github.com/catcherwong/rest-api-sample/blob/master/LICENSE
+
+// @schemes http
+// @BasePath /
 func main() {
 	log.Println("welcome to rest-api-sample")
 
-	defer db.RedisClient.Close()
+	common.Close()
 
-	gin.SetMode(config.AppCfg.GinMode)
-
-	r := gin.New()
-
-	r.Use(gin.Logger())
-	r.Use(gin.Recovery())
-
-	initSwagger(r)
-
-	r.GET("/metrics", metrics)
-
-	//r.Use(middlewares.AuthMiddleware())
-
-	// enable cors
-	initCors(r)
-
-	//api.InitRouters(r)
-
-	routers.InitRouters(r)
+	r := routers.InitRouter()
 
 	r.Run(":9999")
-}
-
-func metrics(c *gin.Context) {
-	promhttp.Handler().ServeHTTP(c.Writer, c.Request)
-}
-
-func initSwagger(e *gin.Engine) {
-	url := fmt.Sprintf("http://localhost:%d/swagger/doc.json", config.AppCfg.Port)
-	e.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, ginSwagger.URL(url)))
-}
-
-func initCors(e *gin.Engine) {
-	config := cors.DefaultConfig()
-	config.AllowOrigins = []string{"*"}
-	e.Use(cors.New(config))
 }

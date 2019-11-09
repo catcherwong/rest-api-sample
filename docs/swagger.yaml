@@ -1,0 +1,231 @@
+basePath: /
+definitions:
+  common.RestResponse:
+    properties:
+      code:
+        type: integer
+      data:
+        type: object
+      msg:
+        type: string
+    type: object
+  dto.SetStringRequest:
+    properties:
+      exp:
+        type: integer
+      key:
+        type: string
+      val:
+        type: string
+    type: object
+  dto.UserReq:
+    properties:
+      gender:
+        type: integer
+      name:
+        type: string
+    type: object
+info:
+  contact:
+    email: catcher_hwq@outlook.com
+    name: Catcher Wong
+    url: https://github.com/catcherwong
+  description: This is a sample about rest api .
+  license:
+    name: MIT
+    url: https://github.com/catcherwong/rest-api-sample/blob/master/LICENSE
+  termsOfService: https://github.com/catcherwong
+  title: rest-api-sample
+  version: "1.0"
+paths:
+  /api/mock:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"data":[]}'
+          schema:
+            $ref: '#/definitions/common.RestResponse'
+      summary: Get some result after 2 second
+      tags:
+      - Mock
+  /api/mock/get1:
+    get:
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: "1"
+          schema:
+            type: string
+      summary: Get some result after 1 second
+      tags:
+      - Mock
+  /api/mock/get2:
+    get:
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: "2"
+          schema:
+            type: string
+      summary: Get some result after 2 second
+      tags:
+      - Mock
+  /api/v1/metrics:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":0,"data":{},"msg":"ok"}'
+          schema:
+            $ref: '#/definitions/common.RestResponse'
+      summary: Record some metrics
+      tags:
+      - Metrics
+  /api/v1/redis:
+    delete:
+      parameters:
+      - description: Key
+        in: query
+        name: key
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":0,"data":{},"msg":"ok"}'
+          schema:
+            $ref: '#/definitions/common.RestResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Delete a key from redis
+      tags:
+      - Redis
+  /api/v1/redis/string:
+    get:
+      parameters:
+      - description: Key
+        in: query
+        name: key
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":0,"data":{},"msg":"ok"}'
+          schema:
+            $ref: '#/definitions/common.RestResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get a string value from redis
+      tags:
+      - Redis
+    post:
+      parameters:
+      - description: Name
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/dto.SetStringRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":0,"data":{},"msg":"ok"}'
+          schema:
+            $ref: '#/definitions/common.RestResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Set string value to redis
+      tags:
+      - Redis
+  /api/v1/users:
+    get:
+      parameters:
+      - description: Id
+        in: query
+        name: id
+        type: integer
+      - description: Name
+        in: query
+        name: name
+        type: string
+      - description: Gender
+        in: query
+        name: gender
+        type: integer
+      - description: PageIndex
+        in: query
+        name: pageIndex
+        type: integer
+      - description: PageSize
+        in: query
+        name: pageSize
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":0,"data":{},"msg":"ok"}'
+          schema:
+            $ref: '#/definitions/common.RestResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get User List
+      tags:
+      - User
+    post:
+      parameters:
+      - description: Name
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UserReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":0,"data":{},"msg":"ok"}'
+          schema:
+            $ref: '#/definitions/common.RestResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Add User
+      tags:
+      - User
+  /api/v1/users/{id}:
+    get:
+      parameters:
+      - description: Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":0,"data":{},"msg":"ok"}'
+          schema:
+            $ref: '#/definitions/common.RestResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Get User By Id
+      tags:
+      - User
+schemes:
+- http
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

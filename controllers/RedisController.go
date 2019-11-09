@@ -3,6 +3,7 @@ package controllers
 import (
 	"github.com/catcherwong/rest-api-sample/biz"
 	"github.com/catcherwong/rest-api-sample/common"
+	"github.com/catcherwong/rest-api-sample/dto"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
@@ -16,17 +17,18 @@ func NewRedisController() *RedisController {
 	return &RedisController{biz.NewRedisBiz()}
 }
 
+// @Summary Set string value to redis
+// @Tags Redis
+// @Produce  json
+// @Param req body dto.SetStringRequest true "Name"
+// @Success 200 {object} common.RestResponse "{"code":0,"data":{},"msg":"ok"}"
+// @Security ApiKeyAuth
+// @Router /api/v1/redis/string [post]
 func (rc RedisController) SetString(c *gin.Context) {
 
 	d := common.GetOKResponse("")
 
-	type SetStringRequest struct {
-		Key        string `json:"key"`
-		Value      string `json:"val"`
-		Expiration int64  `json:"exp"`
-	}
-
-	var r SetStringRequest
+	var r dto.SetStringRequest
 
 	err := c.ShouldBindJSON(&r)
 
@@ -51,6 +53,13 @@ func (rc RedisController) SetString(c *gin.Context) {
 	c.JSON(http.StatusOK, d)
 }
 
+// @Summary Delete a key from redis
+// @Tags Redis
+// @Produce  json
+// @Param  key query string true "Key"
+// @Success 200 {object} common.RestResponse "{"code":0,"data":{},"msg":"ok"}"
+// @Security ApiKeyAuth
+// @Router /api/v1/redis [delete]
 func (rc RedisController) DeleteValue(c *gin.Context) {
 
 	d := common.GetOKResponse("")
@@ -77,6 +86,13 @@ func (rc RedisController) DeleteValue(c *gin.Context) {
 	c.JSON(http.StatusOK, d)
 }
 
+// @Summary Get a string value from redis
+// @Tags Redis
+// @Produce  json
+// @Param  key query string true "Key"
+// @Success 200 {object} common.RestResponse "{"code":0,"data":{},"msg":"ok"}"
+// @Security ApiKeyAuth
+// @Router /api/v1/redis/string [get]
 func (rc RedisController) GetString(c *gin.Context) {
 
 	d := common.GetOKResponse("")

@@ -18,6 +18,11 @@ func NewMockController() *MockController {
 	return &MockController{}
 }
 
+// @Summary Get some result after 1 second
+// @Tags Mock
+// @Produce  plain
+// @Success 200 {string} string "1"
+// @Router /api/mock/get1 [get]
 func (rc MockController) GetString1(c *gin.Context) {
 
 	time.Sleep(time.Second)
@@ -25,6 +30,11 @@ func (rc MockController) GetString1(c *gin.Context) {
 	c.String(http.StatusOK, "1")
 }
 
+// @Summary Get some result after 2 second
+// @Tags Mock
+// @Produce  plain
+// @Success 200 {string} string "2"
+// @Router /api/mock/get2 [get]
 func (rc MockController) GetString2(c *gin.Context) {
 
 	time.Sleep(2 * time.Second)
@@ -32,6 +42,11 @@ func (rc MockController) GetString2(c *gin.Context) {
 	c.String(http.StatusOK, "2")
 }
 
+// @Summary Get some result after 2 second
+// @Tags Mock
+// @Produce  json
+// @Success 200 {object} common.RestResponse "{"data":[]}"
+// @Router /api/mock [get]
 func (rc MockController) GetString(c *gin.Context) {
 
 	urls := []string{"http://localhost:9999/api/mock/get1", "http://localhost:9999/api/mock/get2"}

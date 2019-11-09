@@ -49,7 +49,7 @@ func (r UserRepo) GetUserById(id int64) models.User {
 
 func (r UserRepo) CreateUser(u models.User) error {
 
-	err := db.SQLiteDb.Raw("insert into userinfo (name, gender) values (?,?)", u.Name, u.Gender).Error
+	err := db.SQLiteDb.Exec("insert into userinfo (name, gender) values (?,?)", u.Name, u.Gender).Error
 
 	return err
 }

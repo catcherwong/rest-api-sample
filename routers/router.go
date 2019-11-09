@@ -1,72 +1,52 @@
 package routers
 
 import (
-	"github.com/catcherwong/rest-api-sample/controllers"
+	"fmt"
+	"github.com/catcherwong/rest-api-sample/config"
+	"github.com/catcherwong/rest-api-sample/middlewares"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"net/http"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
+	swaggerFiles "github.com/swaggo/files"
+	"github.com/swaggo/gin-swagger"
+
+	_ "github.com/catcherwong/rest-api-sample/docs"
 )
 
-func InitRouters(e *gin.Engine) {
+func InitRouter() *gin.Engine {
 
-	e.GET("/", index)
-	e.GET("/ping", pong)
+	gin.SetMode(config.AppCfg.GinMode)
 
-	initUserController(e)
-	initRedisController(e)
-	initMetricsController(e)
-	initMockController(e)
+	r := gin.New()
+
+	r.Use(gin.Logger())
+	r.Use(gin.Recovery())
+
+	initSwagger(r)
+
+	r.GET("/metrics", metrics)
+
+	r.Use(middlewares.AuthMiddleware())
+
+	// enable cors
+	initCors(r)
+
+	initApi(r)
+
+	return r
 }
 
-func pong(c *gin.Context) {
-	c.String(http.StatusOK, "pong")
+func metrics(c *gin.Context) {
+	promhttp.Handler().ServeHTTP(c.Writer, c.Request)
 }
 
-func index(c *gin.Context) {
-	c.String(http.StatusOK, "welcome to rest-api-sample")
+func initSwagger(e *gin.Engine) {
+	url := fmt.Sprintf("http://localhost:%d/swagger/doc.json", config.AppCfg.Port)
+	e.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, ginSwagger.URL(url)))
 }
 
-func initUserController(e *gin.Engine) {
-
-	uc := controllers.NewUserController()
-
-	rg := e.Group("/v1/api/users")
-	{
-		rg.GET("/", uc.GetUserList)
-		rg.GET("/:id", uc.GetUserById)
-		rg.POST("/", uc.AddUser)
-	}
-}
-
-func initRedisController(e *gin.Engine) {
-
-	c := controllers.NewRedisController()
-
-	rg := e.Group("/v1/api/redis")
-	{
-		rg.GET("/string", c.GetString)
-		rg.POST("/string", c.SetString)
-		rg.DELETE("/", c.DeleteValue)
-	}
-}
-
-func initMetricsController(e *gin.Engine) {
-
-	c := controllers.NewMetricsController()
-
-	rg := e.Group("/v1/api/metrics")
-	{
-		rg.GET("/", c.Record)
-	}
-}
-
-func initMockController(e *gin.Engine) {
-
-	c := controllers.NewMockController()
-
-	rg := e.Group("/api/mock")
-	{
-		rg.GET("/", c.GetString)
-		rg.GET("/get1", c.GetString1)
-		rg.GET("/get2", c.GetString2)
-	}
+func initCors(e *gin.Engine) {
+	config := cors.DefaultConfig()
+	config.AllowOrigins = []string{"*"}
+	e.Use(cors.New(config))
 }
