@@ -15,6 +15,7 @@ func initApi(e *gin.Engine) {
 	initRedisController(e)
 	initMetricsController(e)
 	initMockController(e)
+	initGRPCController(e)
 }
 
 func pong(c *gin.Context) {
@@ -68,5 +69,15 @@ func initMockController(e *gin.Engine) {
 		rg.GET("/", c.GetString)
 		rg.GET("/get1", c.GetString1)
 		rg.GET("/get2", c.GetString2)
+	}
+}
+
+func initGRPCController(e *gin.Engine) {
+
+	c := controllers.NewGRpcController()
+
+	rg := e.Group("/api/v1/grpc")
+	{
+		rg.GET("/", c.GetString)
 	}
 }

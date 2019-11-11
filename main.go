@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/catcherwong/rest-api-sample/common"
 	"github.com/catcherwong/rest-api-sample/routers"
+	"github.com/catcherwong/rest-api-sample/svcs"
 	"log"
 
 	_ "github.com/catcherwong/rest-api-sample/docs"
@@ -32,6 +33,8 @@ func main() {
 	common.Close()
 
 	r := routers.InitRouter()
+
+	go svcs.InitGRPC()
 
 	r.Run(":9999")
 }

@@ -74,6 +74,26 @@ paths:
       summary: Get some result after 2 second
       tags:
       - Mock
+  /api/v1/grpc:
+    get:
+      parameters:
+      - description: Name
+        in: query
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"code":0,"data":{},"msg":"ok"}'
+          schema:
+            $ref: '#/definitions/common.RestResponse'
+      security:
+      - ApiKeyAuth: []
+      summary: Test GRPC
+      tags:
+      - GRPC
   /api/v1/metrics:
     get:
       produces:

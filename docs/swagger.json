@@ -77,6 +77,39 @@
                 }
             }
         },
+        "/api/v1/grpc": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "GRPC"
+                ],
+                "summary": "Test GRPC",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Name",
+                        "name": "name",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":0,\"data\":{},\"msg\":\"ok\"}",
+                        "schema": {
+                            "$ref": "#/definitions/common.RestResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/metrics": {
             "get": {
                 "produces": [
